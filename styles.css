@@ -39,8 +39,6 @@ body {
 .fx-btn:hover {
   background: #0055ff;
 }
-
-/* Active FX look */
 .fx-btn.active {
   background: #ff3399;
   color: #fff;
@@ -92,7 +90,7 @@ body {
   background: #0033cc;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
 }
 
 .step:hover {
