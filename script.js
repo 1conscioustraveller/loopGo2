@@ -17,18 +17,18 @@ highpass.frequency.value = 20;
 
 const distortion = audioCtx.createWaveShaper();
 function makeDistortionCurve(amount = 50) {
-  let k = typeof amount === 'number' ? amount : 50;
+  let k = typeof amount === "number" ? amount : 50;
   let n_samples = 44100;
   let curve = new Float32Array(n_samples);
   let deg = Math.PI / 180;
   for (let i = 0; i < n_samples; ++i) {
-    let x = i * 2 / n_samples - 1;
-    curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
+    let x = (i * 2) / n_samples - 1;
+    curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
   }
   return curve;
 }
 distortion.curve = makeDistortionCurve(100);
-distortion.oversample = '4x';
+distortion.oversample = "4x";
 
 const delay = audioCtx.createDelay();
 delay.delayTime.value = 0.25;
@@ -64,7 +64,7 @@ let fxActive = {
   reverb: false,
   pitch: false,
   chorus: false,
-  mute: false
+  mute: false,
 };
 
 // Build chain dynamically
@@ -141,8 +141,8 @@ function playBass(time) {
 }
 
 function playChord(time) {
-  const freqs = [261.63, 329.63, 392.00]; // C major chord
-  freqs.forEach(freq => {
+  const freqs = [261.63, 329.63, 392.0]; // C major chord
+  freqs.forEach((freq) => {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
@@ -159,28 +159,28 @@ function playChord(time) {
   });
 }
 
-// ======== SEQUENCER (unchanged) =========
-const steps = document.querySelectorAll('.step');
+// ======== SEQUENCER =========
+const steps = document.querySelectorAll(".step");
 let currentStep = 0;
 let bpm = 120;
 let isPlaying = false;
 let timer;
 
 function getInterval() {
-  return (60 / bpm) / 2; // 8th notes
+  return 60 / bpm / 2; // 8th notes
 }
 
 function scheduler() {
   const now = audioCtx.currentTime;
 
-  document.querySelectorAll('.sequencer').forEach((seq, seqIndex) => {
-    const grid = seq.querySelectorAll('.step');
+  document.querySelectorAll(".sequencer").forEach((seq, seqIndex) => {
+    const grid = seq.querySelectorAll(".step");
     const step = grid[currentStep];
 
-    grid.forEach(s => s.classList.remove('playing'));
-    step.classList.add('playing');
+    grid.forEach((s) => s.classList.remove("playing"));
+    step.classList.add("playing");
 
-    if (step.classList.contains('active')) {
+    if (step.classList.contains("active")) {
       if (seqIndex === 0) playKick(now);
       if (seqIndex === 1) playBass(now);
       if (seqIndex === 2) playSnare(now);
@@ -193,19 +193,19 @@ function scheduler() {
 }
 
 // ======== STEP TOGGLING =========
-steps.forEach(step => {
-  step.addEventListener('click', () => {
-    step.classList.toggle('active');
+steps.forEach((step) => {
+  step.addEventListener("click", () => {
+    step.classList.toggle("active");
   });
 });
 
-// ======== CONTROLS =========
-const playBtn = document.getElementById('playBtn');
-const stopBtn = document.getElementById('stopBtn');
-const tempoSlider = document.getElementById('tempo');
-const tempoValue = document.getElementById('tempoValue');
+// ======== TRANSPORT CONTROLS =========
+const playBtn = document.getElementById("playBtn");
+const stopBtn = document.getElementById("stopBtn");
+const tempoSlider = document.getElementById("tempo");
+const tempoValue = document.getElementById("tempoValue");
 
-playBtn.addEventListener('click', () => {
+playBtn.addEventListener("click", () => {
   if (!isPlaying) {
     if (audioCtx.state === "suspended") {
       audioCtx.resume();
@@ -215,34 +215,49 @@ playBtn.addEventListener('click', () => {
   }
 });
 
-stopBtn.addEventListener('click', () => {
+stopBtn.addEventListener("click", () => {
   isPlaying = false;
   clearTimeout(timer);
   currentStep = 0;
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('playing'));
+  document.querySelectorAll(".step").forEach((s) => s.classList.remove("playing"));
 });
 
-tempoSlider.addEventListener('input', e => {
+tempoSlider.addEventListener("input", (e) => {
   bpm = parseInt(e.target.value, 10);
   tempoValue.textContent = bpm;
 });
 
 // ======== FX BUTTONS =========
-const fxButtons = document.querySelectorAll('.fx-btn');
+const fxButtons = document.querySelectorAll(".fx-btn");
 fxButtons.forEach((btn, i) => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener("click", () => {
     switch (i) {
-      case 0: fxActive.lowpass = !fxActive.lowpass; break;
-      case 1: fxActive.highpass = !fxActive.highpass; break;
-      case 2: fxActive.distortion = !fxActive.distortion; break;
-      case 3: fxActive.delay = !fxActive.delay; break;
-      case 4: fxActive.reverb = !fxActive.reverb; break;
-      case 5: fxActive.pitch = !fxActive.pitch; break;
-      case 6: fxActive.chorus = !fxActive.chorus; break;
-      case 7: fxActive.mute = !fxActive.mute;
-              masterGain.gain.value = fxActive.mute ? 0 : 1;
-              break;
+      case 0:
+        fxActive.lowpass = !fxActive.lowpass;
+        break;
+      case 1:
+        fxActive.highpass = !fxActive.highpass;
+        break;
+      case 2:
+        fxActive.distortion = !fxActive.distortion;
+        break;
+      case 3:
+        fxActive.delay = !fxActive.delay;
+        break;
+      case 4:
+        fxActive.reverb = !fxActive.reverb;
+        break;
+      case 5:
+        fxActive.pitch = !fxActive.pitch;
+        break;
+      case 6:
+        fxActive.chorus = !fxActive.chorus;
+        break;
+      case 7:
+        fxActive.mute = !fxActive.mute;
+        masterGain.gain.value = fxActive.mute ? 0 : 1;
+        break;
     }
-    btn.classList.toggle('active');
+    btn.classList.toggle("active");
   });
 });
