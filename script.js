@@ -6,6 +6,15 @@ const masterGain = audioCtx.createGain();
 masterGain.gain.value = 1;
 masterGain.connect(audioCtx.destination);
 
+// Per-track gain nodes
+const trackGains = {
+  kick: audioCtx.createGain(),
+  bass: audioCtx.createGain(),
+  snare: audioCtx.createGain(),
+  chord: audioCtx.createGain()
+};
+Object.values(trackGains).forEach(g => g.connect(masterGain));
+
 // FX Nodes
 const lowpass = audioCtx.createBiquadFilter();
 lowpass.type = "lowpass";
@@ -37,7 +46,6 @@ feedback.gain.value = 0.3;
 delay.connect(feedback).connect(delay);
 
 const reverb = audioCtx.createConvolver();
-// simple fake impulse response
 const reverbBuffer = audioCtx.createBuffer(2, audioCtx.sampleRate * 2, audioCtx.sampleRate);
 for (let ch = 0; ch < 2; ch++) {
   const data = reverbBuffer.getChannelData(ch);
@@ -68,7 +76,7 @@ let fxActive = {
 };
 
 // Build chain dynamically
-function buildChain(source) {
+function buildChain(source, track) {
   let node = source;
 
   if (fxActive.lowpass) node = node.connect(lowpass);
@@ -78,8 +86,8 @@ function buildChain(source) {
   if (fxActive.reverb) node = node.connect(reverb);
   if (fxActive.chorus) node = node.connect(chorus);
 
-  // Always connect to master
-  node.connect(masterGain);
+  // Connect to track gain instead of master directly
+  node.connect(trackGains[track]);
 }
 
 // ======== SOUND GENERATORS =========
@@ -95,7 +103,7 @@ function playKick(time) {
   gain.gain.exponentialRampToValueAtTime(0.001, time + 0.5);
 
   osc.connect(gain);
-  buildChain(gain);
+  buildChain(gain, "kick");
   osc.start(time);
   osc.stop(time + 0.5);
 }
@@ -119,7 +127,7 @@ function playSnare(time) {
   gain.gain.exponentialRampToValueAtTime(0.01, time + 0.2);
 
   noise.connect(filter).connect(gain);
-  buildChain(gain);
+  buildChain(gain, "snare");
   noise.start(time);
   noise.stop(time + 0.2);
 }
@@ -129,13 +137,13 @@ function playBass(time) {
   const gain = audioCtx.createGain();
 
   osc.type = "square";
-  osc.frequency.setValueAtTime(fxActive.pitch ? 110 : 55, time); // FX6 doubles pitch
+  osc.frequency.setValueAtTime(fxActive.pitch ? 110 : 55, time);
 
   gain.gain.setValueAtTime(0.5, time);
   gain.gain.exponentialRampToValueAtTime(0.001, time + 0.5);
 
   osc.connect(gain);
-  buildChain(gain);
+  buildChain(gain, "bass");
   osc.start(time);
   osc.stop(time + 0.5);
 }
@@ -153,13 +161,13 @@ function playChord(time) {
     gain.gain.exponentialRampToValueAtTime(0.001, time + 1);
 
     osc.connect(gain);
-    buildChain(gain);
+    buildChain(gain, "chord");
     osc.start(time);
     osc.stop(time + 1);
   });
 }
 
-// ======== SEQUENCER (unchanged) =========
+// ======== SEQUENCER =========
 const steps = document.querySelectorAll('.step');
 let currentStep = 0;
 let bpm = 120;
@@ -244,5 +252,14 @@ fxButtons.forEach((btn, i) => {
               break;
     }
     btn.classList.toggle('active');
+  });
+});
+
+// ======== VOLUME SLIDERS =========
+const volumeSliders = document.querySelectorAll('.volume-slider');
+volumeSliders.forEach(slider => {
+  slider.addEventListener('input', e => {
+    const track = slider.dataset.track;
+    trackGains[track].gain.value = parseFloat(e.target.value);
   });
 });
