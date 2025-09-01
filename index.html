@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Sequencer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Controls -->
+    <div class="controls">
+      <button id="playBtn">▶ Play</button>
+      <button id="stopBtn">■ Stop</button>
+      <label for="tempo">BPM: <span id="tempoValue">120</span></label>
+      <input type="range" id="tempo" min="60" max="200" value="120">
+    </div>
+
+    <!-- Effects Buttons -->
+    <div class="fx-section">
+      <button class="fx-btn">FX1</button>
+      <button class="fx-btn">FX2</button>
+      <button class="fx-btn">FX3</button>
+      <button class="fx-btn">FX4</button>
+      <button class="fx-btn">FX5</button>
+      <button class="fx-btn">FX6</button>
+      <button class="fx-btn">FX7</button>
+      <button class="fx-btn">FX8</button>
+    </div>
+
+    <!-- Record Buttons -->
+    <div class="rec-section">
+      <button class="rec-btn">rec1</button>
+      <button class="rec-btn">rec2</button>
+      <button class="rec-btn">rec3</button>
+      <button class="rec-btn">rec4</button>
+    </div>
+
+    <!-- Sequencers -->
+    <div class="sequencer">
+      <h2>KICK</h2>
+      <div class="grid">
+        <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+        <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+      </div>
+    </div>
+
+    <div class="sequencer">
+      <h2>BASS</h2>
+      <div class="grid">
+        <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+        <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+      </div>
+    </div>
+
+    <div class="sequencer">
+      <h2>SNARE</h2>
+      <div class="grid">
+        <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+        <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+      </div>
+    </div>
+
+    <div class="sequencer">
+      <h2>CHORD LOOP</h2>
+      <div class="grid">
+        <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+        <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
