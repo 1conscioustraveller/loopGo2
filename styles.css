@@ -1,0 +1,138 @@
+/* General */
+body {
+  background-color: #001a66;
+  color: #00ccff;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background-color: #00124d;
+  border: 2px solid #00ccff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 350px;
+  text-align: center;
+}
+
+/* FX buttons */
+.fx-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.fx-btn {
+  background: #0033cc;
+  border: none;
+  padding: 10px;
+  color: #00ccff;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.fx-btn:hover {
+  background: #0055ff;
+}
+
+/* Rec buttons */
+.rec-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.rec-btn {
+  background: #004466;
+  border: none;
+  padding: 8px;
+  color: #00ffff;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.rec-btn:hover {
+  background: #006699;
+}
+
+/* Sequencer */
+.sequencer {
+  margin-bottom: 25px;
+}
+
+.sequencer h2 {
+  margin: 10px 0;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  justify-items: center;
+}
+
+.step {
+  width: 30px;
+  height: 30px;
+  background: #0033cc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.step:hover {
+  background: #0055ff;
+}
+
+.step.active {
+  background: #00ccff;
+  box-shadow: 0 0 10px #00ccff;
+}
+
+.step.playing {
+  border: 2px solid #ffffff;
+}
+
+/* Controls */
+.controls {
+  margin-bottom: 20px;
+}
+
+.controls button {
+  background: #0033cc;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 5px;
+  color: #00ccff;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  background: #0055ff;
+}
+
+.controls label {
+  margin-left: 15px;
+  font-size: 14px;
+}
+
+#tempo {
+  width: 150px;
+  margin-left: 10px;
+}
+
+.fx-btn.active {
+  background: #ff3399;
+  color: #fff;
+  box-shadow: 0 0 10px #ff3399;
+}
