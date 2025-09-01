@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Web Sequencer</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <div class="container">
@@ -30,10 +30,10 @@
 
     <!-- Record Buttons -->
     <div class="rec-section">
-      <button class="rec-btn">rec1</button>
-      <button class="rec-btn">rec2</button>
-      <button class="rec-btn">rec3</button>
-      <button class="rec-btn">rec4</button>
+      <button class="rec-btn" data-slot="0">rec1</button>
+      <button class="rec-btn" data-slot="1">rec2</button>
+      <button class="rec-btn" data-slot="2">rec3</button>
+      <button class="rec-btn" data-slot="3">rec4</button>
     </div>
 
     <!-- Sequencers -->
@@ -66,6 +66,53 @@
       <div class="grid">
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+      </div>
+    </div>
+
+    <!-- Loops Section -->
+    <div class="loops-section">
+      <h2>Recorded Loops</h2>
+      <div class="loops-grid">
+        <div class="loop-box" data-slot="0">
+          <div class="loop-title">Loop 1</div>
+          <div class="loop-status" id="loopStatus0">empty</div>
+          <audio id="loopAudio0" controls loop></audio>
+          <div class="loop-actions">
+            <button class="loop-play" data-slot="0">Play/Stop</button>
+            <button class="loop-clear" data-slot="0">Clear</button>
+          </div>
+        </div>
+        <div class="loop-box" data-slot="1">
+          <div class="loop-title">Loop 2</div>
+          <div class="loop-status" id="loopStatus1">empty</div>
+          <audio id="loopAudio1" controls loop></audio>
+          <div class="loop-actions">
+            <button class="loop-play" data-slot="1">Play/Stop</button>
+            <button class="loop-clear" data-slot="1">Clear</button>
+          </div>
+        </div>
+        <div class="loop-box" data-slot="2">
+          <div class="loop-title">Loop 3</div>
+          <div class="loop-status" id="loopStatus2">empty</div>
+          <audio id="loopAudio2" controls loop></audio>
+          <div class="loop-actions">
+            <button class="loop-play" data-slot="2">Play/Stop</button>
+            <button class="loop-clear" data-slot="2">Clear</button>
+          </div>
+        </div>
+        <div class="loop-box" data-slot="3">
+          <div class="loop-title">Loop 4</div>
+          <div class="loop-status" id="loopStatus3">empty</div>
+          <audio id="loopAudio3" controls loop></audio>
+          <div class="loop-actions">
+            <button class="loop-play" data-slot="3">Play/Stop</button>
+            <button class="loop-clear" data-slot="3">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mic-tip">
+        Tip: On first record, your browser will ask for mic permission. Mic is mixed into recordings (not to speakers).
       </div>
     </div>
   </div>
