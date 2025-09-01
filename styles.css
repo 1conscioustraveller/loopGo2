@@ -40,6 +40,13 @@ body {
   background: #0055ff;
 }
 
+/* Active FX look */
+.fx-btn.active {
+  background: #ff3399;
+  color: #fff;
+  box-shadow: 0 0 10px #ff3399;
+}
+
 /* Rec buttons */
 .rec-section {
   display: grid;
@@ -129,16 +136,4 @@ body {
 #tempo {
   width: 150px;
   margin-left: 10px;
-}
-
-.fx-btn.active {
-  background: #ff3399;
-  color: #fff;
-  box-shadow: 0 0 10px #ff3399;
-}
-
-/* Volume sliders */
-.volume-slider {
-  width: 100%;
-  margin: 5px 0 15px 0;
 }
