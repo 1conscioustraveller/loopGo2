@@ -17,18 +17,18 @@ highpass.frequency.value = 20;
 
 const distortion = audioCtx.createWaveShaper();
 function makeDistortionCurve(amount = 50) {
-  let k = typeof amount === "number" ? amount : 50;
+  let k = typeof amount === 'number' ? amount : 50;
   let n_samples = 44100;
   let curve = new Float32Array(n_samples);
   let deg = Math.PI / 180;
   for (let i = 0; i < n_samples; ++i) {
-    let x = (i * 2) / n_samples - 1;
-    curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+    let x = i * 2 / n_samples - 1;
+    curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
   }
   return curve;
 }
 distortion.curve = makeDistortionCurve(100);
-distortion.oversample = "4x";
+distortion.oversample = '4x';
 
 const delay = audioCtx.createDelay();
 delay.delayTime.value = 0.25;
@@ -64,7 +64,7 @@ let fxActive = {
   reverb: false,
   pitch: false,
   chorus: false,
-  mute: false,
+  mute: false
 };
 
 // Build chain dynamically
@@ -141,8 +141,8 @@ function playBass(time) {
 }
 
 function playChord(time) {
-  const freqs = [261.63, 329.63, 392.0]; // C major chord
-  freqs.forEach((freq) => {
+  const freqs = [261.63, 329.63, 392.00]; // C major chord
+  freqs.forEach(freq => {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
@@ -160,27 +160,27 @@ function playChord(time) {
 }
 
 // ======== SEQUENCER =========
-const steps = document.querySelectorAll(".step");
+const steps = document.querySelectorAll('.step');
 let currentStep = 0;
 let bpm = 120;
 let isPlaying = false;
 let timer;
 
 function getInterval() {
-  return 60 / bpm / 2; // 8th notes
+  return (60 / bpm) / 2; // 8th notes
 }
 
 function scheduler() {
   const now = audioCtx.currentTime;
 
-  document.querySelectorAll(".sequencer").forEach((seq, seqIndex) => {
-    const grid = seq.querySelectorAll(".step");
+  document.querySelectorAll('.sequencer').forEach((seq, seqIndex) => {
+    const grid = seq.querySelectorAll('.step');
     const step = grid[currentStep];
 
-    grid.forEach((s) => s.classList.remove("playing"));
-    step.classList.add("playing");
+    grid.forEach(s => s.classList.remove('playing'));
+    step.classList.add('playing');
 
-    if (step.classList.contains("active")) {
+    if (step.classList.contains('active')) {
       if (seqIndex === 0) playKick(now);
       if (seqIndex === 1) playBass(now);
       if (seqIndex === 2) playSnare(now);
@@ -193,19 +193,19 @@ function scheduler() {
 }
 
 // ======== STEP TOGGLING =========
-steps.forEach((step) => {
-  step.addEventListener("click", () => {
-    step.classList.toggle("active");
+steps.forEach(step => {
+  step.addEventListener('click', () => {
+    step.classList.toggle('active');
   });
 });
 
-// ======== TRANSPORT CONTROLS =========
-const playBtn = document.getElementById("playBtn");
-const stopBtn = document.getElementById("stopBtn");
-const tempoSlider = document.getElementById("tempo");
-const tempoValue = document.getElementById("tempoValue");
+// ======== CONTROLS =========
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const tempoSlider = document.getElementById('tempo');
+const tempoValue = document.getElementById('tempoValue');
 
-playBtn.addEventListener("click", () => {
+playBtn.addEventListener('click', () => {
   if (!isPlaying) {
     if (audioCtx.state === "suspended") {
       audioCtx.resume();
@@ -215,49 +215,183 @@ playBtn.addEventListener("click", () => {
   }
 });
 
-stopBtn.addEventListener("click", () => {
+stopBtn.addEventListener('click', () => {
   isPlaying = false;
   clearTimeout(timer);
   currentStep = 0;
-  document.querySelectorAll(".step").forEach((s) => s.classList.remove("playing"));
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('playing'));
 });
 
-tempoSlider.addEventListener("input", (e) => {
+tempoSlider.addEventListener('input', e => {
   bpm = parseInt(e.target.value, 10);
   tempoValue.textContent = bpm;
 });
 
 // ======== FX BUTTONS =========
-const fxButtons = document.querySelectorAll(".fx-btn");
+const fxButtons = document.querySelectorAll('.fx-btn');
 fxButtons.forEach((btn, i) => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener('click', () => {
     switch (i) {
-      case 0:
-        fxActive.lowpass = !fxActive.lowpass;
-        break;
-      case 1:
-        fxActive.highpass = !fxActive.highpass;
-        break;
-      case 2:
-        fxActive.distortion = !fxActive.distortion;
-        break;
-      case 3:
-        fxActive.delay = !fxActive.delay;
-        break;
-      case 4:
-        fxActive.reverb = !fxActive.reverb;
-        break;
-      case 5:
-        fxActive.pitch = !fxActive.pitch;
-        break;
-      case 6:
-        fxActive.chorus = !fxActive.chorus;
-        break;
-      case 7:
-        fxActive.mute = !fxActive.mute;
-        masterGain.gain.value = fxActive.mute ? 0 : 1;
-        break;
+      case 0: fxActive.lowpass = !fxActive.lowpass; break;
+      case 1: fxActive.highpass = !fxActive.highpass; break;
+      case 2: fxActive.distortion = !fxActive.distortion; break;
+      case 3: fxActive.delay = !fxActive.delay; break;
+      case 4: fxActive.reverb = !fxActive.reverb; break;
+      case 5: fxActive.pitch = !fxActive.pitch; break;
+      case 6: fxActive.chorus = !fxActive.chorus; break;
+      case 7: fxActive.mute = !fxActive.mute;
+              masterGain.gain.value = fxActive.mute ? 0 : 1;
+              break;
     }
-    btn.classList.toggle("active");
+    btn.classList.toggle('active');
+  });
+});
+
+// ======== RECORDING: 8-BAR LOOPS =========
+
+// Record bus (captures what you hear) + optional mic mix
+const recordBus = audioCtx.createMediaStreamDestination();
+// Record the post-master mix (i.e., the same as what goes to speakers)
+masterGain.connect(recordBus);
+
+// Mic (optional): only mixed into recordings (not into speakers)
+let micAddedToRecordBus = false;
+let micStream = null;
+let micSource = null;
+let micGain = null;
+
+async function ensureMicToRecordBus() {
+  if (micAddedToRecordBus) return;
+  try {
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    micSource = audioCtx.createMediaStreamSource(micStream);
+    micGain = audioCtx.createGain();
+    micGain.gain.value = 1.0;
+    // Do NOT route mic to speakers to avoid feedback.
+    micSource.connect(micGain).connect(recordBus);
+    micAddedToRecordBus = true;
+  } catch (err) {
+    console.warn("Microphone unavailable or denied — recording will only include internal audio.", err);
+  }
+}
+
+// UI helpers
+const recButtons = document.querySelectorAll('.rec-btn');
+const loopAudios = [
+  document.getElementById('loopAudio0'),
+  document.getElementById('loopAudio1'),
+  document.getElementById('loopAudio2'),
+  document.getElementById('loopAudio3')
+];
+const loopStatuses = [
+  document.getElementById('loopStatus0'),
+  document.getElementById('loopStatus1'),
+  document.getElementById('loopStatus2'),
+  document.getElementById('loopStatus3')
+];
+
+function barsToSeconds(bpm, bars = 8, beatsPerBar = 4) {
+  return (60 / bpm) * beatsPerBar * bars;
+}
+
+function setRecUI(slot, stateText, recording = false, disabled = false) {
+  const btn = [...recButtons].find(b => +b.dataset.slot === slot);
+  if (!btn) return;
+  btn.textContent = recording ? `rec${slot + 1} • REC` : `rec${slot + 1}`;
+  btn.classList.toggle('recording', recording);
+  btn.disabled = disabled;
+  loopStatuses[slot].textContent = stateText;
+}
+
+function clearLoop(slot) {
+  const audio = loopAudios[slot];
+  if (audio.src && audio.src.startsWith('blob:')) {
+    URL.revokeObjectURL(audio.src);
+  }
+  audio.src = '';
+  audio.pause();
+  audio.currentTime = 0;
+  loopStatuses[slot].textContent = 'empty';
+}
+
+async function recordEightBars(slot) {
+  // Ensure mic (optional)
+  await ensureMicToRecordBus();
+
+  // Compute 8-bar duration from current BPM
+  const durationSec = barsToSeconds(bpm, 8);
+  const durationMs = Math.round(durationSec * 1000);
+
+  if (typeof MediaRecorder === 'undefined') {
+    alert('MediaRecorder not supported in this browser.');
+    return;
+  }
+
+  // Prepare UI
+  setRecUI(slot, `arming (${(durationSec).toFixed(2)}s)`, true, true);
+
+  // Create a new recorder on the record bus stream
+  let mime = 'audio/webm;codecs=opus';
+  if (!MediaRecorder.isTypeSupported(mime)) {
+    mime = 'audio/webm';
+  }
+  const recorder = new MediaRecorder(recordBus.stream, { mimeType: mime, audioBitsPerSecond: 192000 });
+
+  const chunks = [];
+  recorder.ondataavailable = (e) => {
+    if (e.data && e.data.size > 0) chunks.push(e.data);
+  };
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: mime });
+    const url = URL.createObjectURL(blob);
+    const audio = loopAudios[slot];
+    // Cleanup previous blob if any
+    if (audio.src && audio.src.startsWith('blob:')) URL.revokeObjectURL(audio.src);
+
+    audio.src = url;
+    audio.loop = true;
+    loopStatuses[slot].textContent = `ready (${(durationSec).toFixed(2)}s @ ${bpm} BPM)`;
+    setRecUI(slot, loopStatuses[slot].textContent, false, false);
+  };
+
+  // Start recording exactly now for N seconds
+  setRecUI(slot, `recording… (${(durationSec).toFixed(2)}s)`, true, true);
+  recorder.start(); // no timeslice; collect at stop
+
+  // Stop automatically after 8 bars
+  setTimeout(() => {
+    recorder.stop();
+  }, durationMs);
+}
+
+// Bind rec buttons
+recButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const slot = parseInt(btn.dataset.slot, 10);
+    recordEightBars(slot);
+  });
+});
+
+// Loop actions (Play/Stop, Clear)
+document.querySelectorAll('.loop-play').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const slot = parseInt(btn.dataset.slot, 10);
+    const audio = loopAudios[slot];
+    if (!audio.src) return;
+    if (audio.paused) {
+      audio.play().catch(() => {}); // ignore autoplay restrictions (button counts as gesture)
+      loopStatuses[slot].textContent = 'playing (loop)';
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+      loopStatuses[slot].textContent = 'stopped';
+    }
+  });
+});
+
+document.querySelectorAll('.loop-clear').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const slot = parseInt(btn.dataset.slot, 10);
+    clearLoop(slot);
   });
 });
