@@ -36,9 +36,7 @@ body {
   cursor: pointer;
   border-radius: 5px;
 }
-.fx-btn:hover {
-  background: #0055ff;
-}
+.fx-btn:hover { background: #0055ff; }
 
 /* Rec buttons */
 .rec-section {
@@ -57,28 +55,31 @@ body {
   cursor: pointer;
   border-radius: 5px;
 }
-.rec-btn:hover {
-  background: #006699;
+.rec-btn:hover { background: #006699; }
+.rec-btn.recording {
+  animation: pulse 0.9s infinite;
+  background: #b00040;
+  color: #fff;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 50, 120, 0.9); }
+  70% { box-shadow: 0 0 0 12px rgba(255, 50, 120, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 50, 120, 0); }
 }
 
 /* Sequencer */
-.sequencer {
-  margin-bottom: 25px;
-}
-
+.sequencer { margin-bottom: 25px; }
 .sequencer h2 {
   margin: 10px 0;
   font-size: 16px;
   letter-spacing: 2px;
 }
-
 .grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   gap: 6px;
   justify-items: center;
 }
-
 .step {
   width: 30px;
   height: 30px;
@@ -87,25 +88,15 @@ body {
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s;
 }
-
-.step:hover {
-  background: #0055ff;
-}
-
+.step:hover { background: #0055ff; }
 .step.active {
   background: #00ccff;
   box-shadow: 0 0 10px #00ccff;
 }
-
-.step.playing {
-  border: 2px solid #ffffff;
-}
+.step.playing { border: 2px solid #ffffff; }
 
 /* Controls */
-.controls {
-  margin-bottom: 20px;
-}
-
+.controls { margin-bottom: 20px; }
 .controls button {
   background: #0033cc;
   border: none;
@@ -116,23 +107,65 @@ body {
   border-radius: 6px;
   cursor: pointer;
 }
-
-.controls button:hover {
-  background: #0055ff;
-}
-
-.controls label {
-  margin-left: 15px;
-  font-size: 14px;
-}
-
-#tempo {
-  width: 150px;
-  margin-left: 10px;
-}
+.controls button:hover { background: #0055ff; }
+.controls label { margin-left: 15px; font-size: 14px; }
+#tempo { width: 150px; margin-left: 10px; }
 
 .fx-btn.active {
   background: #ff3399;
   color: #fff;
   box-shadow: 0 0 10px #ff3399;
+}
+
+/* Loops */
+.loops-section {
+  margin-top: 24px;
+  text-align: left;
+}
+.loops-section h2 {
+  text-align: center;
+  margin: 10px 0 12px;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.loops-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.loop-box {
+  background: #001043;
+  border: 1px solid #00ccff44;
+  border-radius: 10px;
+  padding: 10px;
+}
+.loop-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #9be7ff;
+}
+.loop-status {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.loop-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.loop-actions button {
+  background: #003a88;
+  border: none;
+  padding: 6px 10px;
+  color: #e0f7ff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.loop-actions button:hover { background: #0050bb; }
+
+.mic-tip {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 8px;
 }
