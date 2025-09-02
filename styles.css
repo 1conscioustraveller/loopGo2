@@ -15,7 +15,7 @@ body {
   border: 2px solid #00ccff;
   border-radius: 10px;
   padding: 20px;
-  width: 420px;
+  width: 350px;
   text-align: center;
 }
 
@@ -24,7 +24,7 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .fx-btn {
@@ -45,6 +45,27 @@ body {
   box-shadow: 0 0 10px #ff3399;
 }
 
+/* Rec buttons */
+.rec-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.rec-btn {
+  background: #004466;
+  border: none;
+  padding: 8px;
+  color: #00ffff;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.rec-btn:hover {
+  background: #006699;
+}
+
 /* Sequencer */
 .sequencer {
   margin-bottom: 25px;
@@ -61,7 +82,6 @@ body {
   grid-template-columns: repeat(8, 1fr);
   gap: 6px;
   justify-items: center;
-  margin-bottom: 10px;
 }
 
 .step {
@@ -70,15 +90,18 @@ body {
   background: #0033cc;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
 }
+
 .step:hover {
   background: #0055ff;
 }
+
 .step.active {
   background: #00ccff;
   box-shadow: 0 0 10px #00ccff;
 }
+
 .step.playing {
   border: 2px solid #ffffff;
 }
@@ -98,6 +121,7 @@ body {
   border-radius: 6px;
   cursor: pointer;
 }
+
 .controls button:hover {
   background: #0055ff;
 }
@@ -107,7 +131,7 @@ body {
   font-size: 14px;
 }
 
-input[type="range"] {
+#tempo {
   width: 150px;
   margin-left: 10px;
 }
