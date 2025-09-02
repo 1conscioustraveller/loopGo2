@@ -1,40 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>loopGo2</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LoopGo2</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>loopGo2</h1>
-
     <!-- FX Section -->
     <div class="fx-section">
       <button class="fx-btn" data-fx="pitchshift">PitchShift</button>
       <button class="fx-btn" data-fx="reverb">Reverb</button>
       <button class="fx-btn" data-fx="bandpass">Bandpass</button>
       <button class="fx-btn" data-fx="ringmod">Ring Mod</button>
-      <button class="fx-btn" data-fx="stereopanner">Stereo Panner</button>
+      <button class="fx-btn" data-fx="stereopanner">Stereo Pan</button>
       <button class="fx-btn" data-fx="delay">Delay</button>
       <button class="fx-btn" data-fx="chorus">Chorus</button>
       <button class="fx-btn" data-fx="autopan">AutoPan</button>
     </div>
 
     <!-- Sequencers -->
-    <div id="sequencers"></div>
+    <div id="sequencers">
+      <div class="sequencer" data-type="kick">
+        <h2>Kick</h2>
+        <div class="grid"></div>
+        <div class="controls">
+          <label>Volume
+            <input type="range" min="0" max="1" step="0.01" value="0.8" class="volume">
+          </label>
+        </div>
+      </div>
 
-    <!-- Controls -->
+      <div class="sequencer" data-type="snare">
+        <h2>Snare</h2>
+        <div class="grid"></div>
+        <div class="controls">
+          <label>Volume
+            <input type="range" min="0" max="1" step="0.01" value="0.8" class="volume">
+          </label>
+        </div>
+      </div>
+
+      <div class="sequencer" data-type="bass">
+        <h2>Bass</h2>
+        <div class="grid"></div>
+        <div class="controls">
+          <label>Volume
+            <input type="range" min="0" max="1" step="0.01" value="0.8" class="volume">
+          </label>
+        </div>
+      </div>
+
+      <div class="sequencer" data-type="chord">
+        <h2>Chord Loop</h2>
+        <div class="grid"></div>
+        <div class="controls">
+          <label>Volume
+            <input type="range" min="0" max="1" step="0.01" value="0.8" class="volume">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Controls -->
     <div class="controls">
-      <button id="play">▶ Play</button>
-      <button id="stop">■ Stop</button>
-      <label for="tempo">Tempo:</label>
-      <input type="range" id="tempo" min="60" max="180" value="120">
-      <span id="tempoVal">120 BPM</span>
+      <button id="start">Start</button>
+      <button id="stop">Stop</button>
+      <label for="tempo">Tempo</label>
+      <input type="range" id="tempo" min="60" max="180" step="1" value="120" />
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
