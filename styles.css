@@ -15,14 +15,8 @@ body {
   border: 2px solid #00ccff;
   border-radius: 10px;
   padding: 20px;
-  width: 400px;
+  width: 420px;
   text-align: center;
-}
-
-h1 {
-  margin-bottom: 15px;
-  font-size: 20px;
-  letter-spacing: 2px;
 }
 
 /* FX buttons */
@@ -41,11 +35,9 @@ h1 {
   font-weight: bold;
   cursor: pointer;
   border-radius: 5px;
-  transition: background 0.2s, transform 0.2s;
 }
 .fx-btn:hover {
   background: #0055ff;
-  transform: scale(1.05);
 }
 .fx-btn.active {
   background: #ff3399;
@@ -69,6 +61,7 @@ h1 {
   grid-template-columns: repeat(8, 1fr);
   gap: 6px;
   justify-items: center;
+  margin-bottom: 10px;
 }
 
 .step {
@@ -92,7 +85,7 @@ h1 {
 
 /* Controls */
 .controls {
-  margin-top: 15px;
+  margin-bottom: 20px;
 }
 
 .controls button {
@@ -108,11 +101,13 @@ h1 {
 .controls button:hover {
   background: #0055ff;
 }
+
 .controls label {
   margin-left: 15px;
   font-size: 14px;
 }
-#tempo {
+
+input[type="range"] {
   width: 150px;
   margin-left: 10px;
 }
