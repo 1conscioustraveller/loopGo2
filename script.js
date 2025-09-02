@@ -1,174 +1,154 @@
-// loopGo2 script.js
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let currentStep = 0;
+// === Audio Setup ===
+let audioCtx;
 let isPlaying = false;
+let currentStep = 0;
 let tempo = 120;
 let intervalId;
 
-const sequencerData = [
-  { name: "Kick", buffer: null, url: "samples/kick.wav" },
-  { name: "Snare", buffer: null, url: "samples/snare.wav" },
-  { name: "HiHat", buffer: null, url: "samples/hihat.wav" },
-  { name: "Chord", buffer: null, url: "samples/chord.wav" }
-];
+const sequencers = {};
+const fxNodes = {};
 
-// Create sequencers
-const sequencersDiv = document.getElementById("sequencers");
-sequencerData.forEach(seq => {
-  const div = document.createElement("div");
-  div.className = "sequencer";
-  div.innerHTML = `<h2>${seq.name}</h2>`;
-  const grid = document.createElement("div");
-  grid.className = "grid";
-  seq.steps = [];
-  for (let i = 0; i < 8; i++) {
-    const step = document.createElement("div");
-    step.className = "step";
-    step.addEventListener("click", () => {
-      step.classList.toggle("active");
-      seq.steps[i] = !seq.steps[i];
+// Sequencer data
+const tracks = ["kick", "snare", "bass", "chord"];
+const stepsPerSeq = 8;
+
+// === Initialize ===
+document.addEventListener("DOMContentLoaded", () => {
+  // Build sequencer grids
+  tracks.forEach(track => {
+    const grid = document.querySelector(`.sequencer[data-type="${track}"] .grid`);
+    for (let i = 0; i < stepsPerSeq; i++) {
+      const step = document.createElement("div");
+      step.classList.add("step");
+      step.addEventListener("click", () => step.classList.toggle("active"));
+      grid.appendChild(step);
+    }
+  });
+
+  // Hook controls
+  document.getElementById("start").addEventListener("click", start);
+  document.getElementById("stop").addEventListener("click", stop);
+  document.getElementById("tempo").addEventListener("input", e => tempo = e.target.value);
+
+  // FX toggles
+  document.querySelectorAll(".fx-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      btn.classList.toggle("active");
+      toggleFX(btn.dataset.fx, btn.classList.contains("active"));
     });
-    seq.steps.push(false);
-    grid.appendChild(step);
-  }
-  div.appendChild(grid);
-  sequencersDiv.appendChild(div);
+  });
 });
 
-// Load samples
-async function loadSample(url) {
-  const res = await fetch(url);
-  const arrayBuffer = await res.arrayBuffer();
-  return audioCtx.decodeAudioData(arrayBuffer);
-}
-sequencerData.forEach(async seq => {
-  seq.buffer = await loadSample(seq.url);
-});
+// === Create FX Nodes ===
+function createFX() {
+  const ctx = audioCtx;
+  fxNodes.pitchshift = ctx.createDelay(0.05); // Fake pitch shift (placeholder)
+  fxNodes.reverb = ctx.createConvolver();
+  fxNodes.bandpass = ctx.createBiquadFilter();
+  fxNodes.bandpass.type = "bandpass";
+  fxNodes.bandpass.frequency.value = 1000;
+  fxNodes.ringmod = ctx.createGain();
+  fxNodes.stereopanner = ctx.createStereoPanner();
+  fxNodes.delay = ctx.createDelay(5.0);
+  fxNodes.delay.delayTime.value = 0.3;
+  fxNodes.chorus = ctx.createDelay(0.03);
+  fxNodes.autopan = ctx.createOscillator();
 
-// FX Nodes
-const fxNodes = {
-  pitchshift: audioCtx.createGain(), // placeholder, real pitchshift would need library
-  reverb: audioCtx.createConvolver(),
-  bandpass: audioCtx.createBiquadFilter(),
-  ringmod: audioCtx.createGain(),
-  stereopanner: audioCtx.createStereoPanner(),
-  delay: audioCtx.createDelay(5.0),
-  chorus: audioCtx.createDelay(0.03),
-  autopan: audioCtx.createStereoPanner()
-};
-
-// Default settings
-fxNodes.bandpass.type = "bandpass";
-fxNodes.bandpass.frequency.value = 1000;
-
-fxNodes.ringmod.gain.value = 0.5;
-
-fxNodes.stereopanner.pan.value = 0;
-
-fxNodes.delay.delayTime.value = 0.3;
-
-fxNodes.chorus.delayTime.value = 0.015;
-
-fxNodes.autopan.pan.value = 0;
-
-// Reverb IR (simple impulse generator)
-function generateImpulse(duration = 2, decay = 2) {
-  const rate = audioCtx.sampleRate;
-  const length = rate * duration;
-  const impulse = audioCtx.createBuffer(2, length, rate);
-  for (let i = 0; i < impulse.numberOfChannels; i++) {
-    const channel = impulse.getChannelData(i);
-    for (let j = 0; j < length; j++) {
-      channel[j] = (Math.random() * 2 - 1) * Math.pow(1 - j / length, decay);
+  // Generate simple impulse response for reverb
+  const irBuffer = ctx.createBuffer(2, ctx.sampleRate * 3, ctx.sampleRate);
+  for (let ch = 0; ch < irBuffer.numberOfChannels; ch++) {
+    const channelData = irBuffer.getChannelData(ch);
+    for (let i = 0; i < irBuffer.length; i++) {
+      channelData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irBuffer.length, 2);
     }
   }
-  return impulse;
-}
-fxNodes.reverb.buffer = generateImpulse();
-
-// Build FX chain
-let fxActive = {};
-const fxButtons = document.querySelectorAll(".fx-btn");
-fxButtons.forEach(btn => {
-  fxActive[btn.dataset.fx] = false;
-  btn.addEventListener("click", () => {
-    fxActive[btn.dataset.fx] = !fxActive[btn.dataset.fx];
-    btn.classList.toggle("active", fxActive[btn.dataset.fx]);
-  });
-});
-
-// Connect FX dynamically
-function connectFxChain(source) {
-  let node = source;
-  Object.keys(fxNodes).forEach(key => {
-    if (fxActive[key]) {
-      node.connect(fxNodes[key]);
-      node = fxNodes[key];
-    }
-  });
-  node.connect(audioCtx.destination);
+  fxNodes.reverb.buffer = irBuffer;
 }
 
-// Scheduler
-function playStep() {
-  sequencerData.forEach(seq => {
-    if (seq.steps[currentStep] && seq.buffer) {
-      const source = audioCtx.createBufferSource();
-      source.buffer = seq.buffer;
-
-      // Special FX
-      if (fxActive.ringmod) {
-        const osc = audioCtx.createOscillator();
-        const ringGain = audioCtx.createGain();
-        osc.type = "sine";
-        osc.frequency.value = 30;
-        osc.connect(ringGain.gain);
-        osc.start();
-        source.connect(ringGain);
-        connectFxChain(ringGain);
-      } else {
-        connectFxChain(source);
-      }
-
-      source.start();
-    }
-  });
-
-  const allSteps = document.querySelectorAll(".step");
-  allSteps.forEach(step => step.classList.remove("playing"));
-  document.querySelectorAll(".grid").forEach((grid, idx) => {
-    grid.children[currentStep].classList.add("playing");
-  });
-
-  currentStep = (currentStep + 1) % 8;
+// === Toggle FX ===
+function toggleFX(name, enabled) {
+  // For simplicity, FX are global here
+  if (!fxNodes[name]) return;
+  if (enabled) {
+    fxNodes[name].connect(audioCtx.destination);
+  } else {
+    fxNodes[name].disconnect();
+  }
 }
 
+// === Start / Stop ===
 function start() {
-  if (!isPlaying) {
-    isPlaying = true;
-    const interval = (60 / tempo) / 2 * 1000;
-    intervalId = setInterval(playStep, interval);
+  if (isPlaying) return;
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    createFX();
+    setupTracks();
   }
+  isPlaying = true;
+  intervalId = setInterval(playStep, (60 / tempo) * 1000);
 }
 
 function stop() {
   isPlaying = false;
   clearInterval(intervalId);
   currentStep = 0;
-  document.querySelectorAll(".step").forEach(step => step.classList.remove("playing"));
+  document.querySelectorAll(".step").forEach(s => s.classList.remove("playing"));
 }
 
-// Controls
-document.getElementById("play").addEventListener("click", () => {
-  audioCtx.resume();
-  start();
-});
-document.getElementById("stop").addEventListener("click", stop);
-document.getElementById("tempo").addEventListener("input", e => {
-  tempo = e.target.value;
-  document.getElementById("tempoVal").textContent = `${tempo} BPM`;
-  if (isPlaying) {
-    stop();
-    start();
+// === Setup Tracks ===
+function setupTracks() {
+  tracks.forEach(track => {
+    const gain = audioCtx.createGain();
+    gain.connect(audioCtx.destination);
+    sequencers[track] = { gain };
+    // Hook volume slider
+    const vol = document.querySelector(`.sequencer[data-type="${track}"] .volume`);
+    vol.addEventListener("input", e => gain.gain.value = e.target.value);
+  });
+}
+
+// === Play Sequencer ===
+function playStep() {
+  document.querySelectorAll(".step").forEach(s => s.classList.remove("playing"));
+
+  tracks.forEach(track => {
+    const steps = document.querySelectorAll(`.sequencer[data-type="${track}"] .step`);
+    const step = steps[currentStep];
+    step.classList.add("playing");
+    if (step.classList.contains("active")) {
+      triggerSound(track);
+    }
+  });
+
+  currentStep = (currentStep + 1) % stepsPerSeq;
+}
+
+// === Trigger Sound ===
+function triggerSound(track) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  if (track === "kick") {
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    gain.gain.setValueAtTime(1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+  } else if (track === "snare") {
+    osc.type = "triangle";
+    osc.frequency.value = 200;
+    gain.gain.value = 0.5;
+  } else if (track === "bass") {
+    osc.type = "square";
+    osc.frequency.value = 60;
+    gain.gain.value = 0.6;
+  } else if (track === "chord") {
+    osc.type = "sawtooth";
+    osc.frequency.value = 440;
+    gain.gain.value = 0.3;
   }
-});
+
+  osc.connect(gain).connect(sequencers[track].gain);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.5);
+}
