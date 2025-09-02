@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Web Sequencer</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <div class="container">
-    <!-- Controls -->
+    <!-- Transport -->
     <div class="controls">
       <button id="playBtn">▶ Play</button>
       <button id="stopBtn">■ Stop</button>
       <label for="tempo">BPM: <span id="tempoValue">120</span></label>
-      <input type="range" id="tempo" min="60" max="200" value="120" />
+      <input type="range" id="tempo" min="60" max="200" value="120"/>
     </div>
 
-    <!-- Effects Buttons -->
+    <!-- FX Buttons (global toggles applied per-track chain) -->
     <div class="fx-section">
-      <button class="fx-btn" data-fx="lowpass">Lowpass</button>
-      <button class="fx-btn" data-fx="highpass">Highpass</button>
-      <button class="fx-btn" data-fx="distortion">Distortion</button>
-      <button class="fx-btn" data-fx="delay">Delay</button>
-      <button class="fx-btn" data-fx="reverb">Reverb</button>
+      <button class="fx-btn" data-fx="bandpass">Bandpass</button>
+      <button class="fx-btn" data-fx="flanger">Flanger</button>
+      <button class="fx-btn" data-fx="phaser">Phaser</button>
+      <button class="fx-btn" data-fx="ringmod">Ring Mod</button>
+      <button class="fx-btn" data-fx="panner">Stereo Pan</button>
+      <button class="fx-btn" data-fx="reverb">Long Reverb</button>
       <button class="fx-btn" data-fx="pitch">Pitch Shift</button>
-      <button class="fx-btn" data-fx="chorus">Chorus</button>
       <button class="fx-btn" data-fx="tremolo">Tremolo</button>
     </div>
 
-    <!-- Record Buttons -->
+    <!-- Record Buttons (visual only for now) -->
     <div class="rec-section">
       <button class="rec-btn">rec1</button>
       <button class="rec-btn">rec2</button>
@@ -37,36 +37,48 @@
     </div>
 
     <!-- Sequencers -->
-    <div class="sequencer">
+    <div class="sequencer" data-track="kick">
       <h2>KICK</h2>
-      <input type="range" min="0" max="1" step="0.01" value="0.8" class="volume-slider" data-track="kick" />
+      <div class="row">
+        <label class="vol-label">Vol</label>
+        <input type="range" min="0" max="1" step="0.01" value="0.8" class="volume-slider" data-track="kick"/>
+      </div>
       <div class="grid">
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
       </div>
     </div>
 
-    <div class="sequencer">
+    <div class="sequencer" data-track="bass">
       <h2>BASS</h2>
-      <input type="range" min="0" max="1" step="0.01" value="0.6" class="volume-slider" data-track="bass" />
+      <div class="row">
+        <label class="vol-label">Vol</label>
+        <input type="range" min="0" max="1" step="0.01" value="0.6" class="volume-slider" data-track="bass"/>
+      </div>
       <div class="grid">
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
       </div>
     </div>
 
-    <div class="sequencer">
+    <div class="sequencer" data-track="snare">
       <h2>SNARE</h2>
-      <input type="range" min="0" max="1" step="0.01" value="0.7" class="volume-slider" data-track="snare" />
+      <div class="row">
+        <label class="vol-label">Vol</label>
+        <input type="range" min="0" max="1" step="0.01" value="0.7" class="volume-slider" data-track="snare"/>
+      </div>
       <div class="grid">
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
       </div>
     </div>
 
-    <div class="sequencer">
+    <div class="sequencer" data-track="chord">
       <h2>CHORD LOOP</h2>
-      <input type="range" min="0" max="1" step="0.01" value="0.5" class="volume-slider" data-track="chord" />
+      <div class="row">
+        <label class="vol-label">Vol</label>
+        <input type="range" min="0" max="1" step="0.01" value="0.5" class="volume-slider" data-track="chord"/>
+      </div>
       <div class="grid">
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
         <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
