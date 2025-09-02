@@ -5,9 +5,10 @@ body {
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
   margin: 0;
+  padding: 20px;
 }
 
 .container {
@@ -15,8 +16,40 @@ body {
   border: 2px solid #00ccff;
   border-radius: 10px;
   padding: 20px;
-  width: 350px;
+  width: 380px;
   text-align: center;
+  box-shadow: 0 0 20px rgba(0, 204, 255, 0.25);
+}
+
+/* Controls */
+.controls {
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.controls button {
+  background: #0033cc;
+  border: none;
+  padding: 8px 12px;
+  color: #00ccff;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.controls button:hover { background: #0055ff; }
+
+.controls label {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+#tempo {
+  width: 140px;
+  margin-left: 8px;
 }
 
 /* FX buttons */
@@ -26,19 +59,17 @@ body {
   gap: 8px;
   margin-bottom: 15px;
 }
-
 .fx-btn {
   background: #0033cc;
   border: none;
-  padding: 10px;
+  padding: 10px 6px;
   color: #00ccff;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 6px;
+  transition: background 0.2s, box-shadow 0.2s;
 }
-.fx-btn:hover {
-  background: #0055ff;
-}
+.fx-btn:hover { background: #0055ff; }
 .fx-btn.active {
   background: #ff3399;
   color: #fff;
@@ -50,9 +81,8 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  margin-bottom: 25px;
+  margin-bottom: 22px;
 }
-
 .rec-btn {
   background: #004466;
   border: none;
@@ -60,23 +90,43 @@ body {
   color: #00ffff;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
-.rec-btn:hover {
-  background: #006699;
-}
+.rec-btn:hover { background: #006699; }
 
 /* Sequencer */
 .sequencer {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #00ccff;
+  border-radius: 8px;
+  background: #000d33;
 }
 
 .sequencer h2 {
-  margin: 10px 0;
+  margin: 0 0 10px 0;
   font-size: 16px;
   letter-spacing: 2px;
 }
 
+/* Volume row */
+.row {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.vol-label {
+  font-size: 12px;
+  opacity: 0.9;
+}
+.volume-slider {
+  width: 100%;
+}
+
+/* Step Grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -90,48 +140,11 @@ body {
   background: #0033cc;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.08s;
 }
-
-.step:hover {
-  background: #0055ff;
-}
-
+.step:hover { background: #0055ff; transform: scale(1.08); }
 .step.active {
   background: #00ccff;
   box-shadow: 0 0 10px #00ccff;
 }
-
-.step.playing {
-  border: 2px solid #ffffff;
-}
-
-/* Controls */
-.controls {
-  margin-bottom: 20px;
-}
-
-.controls button {
-  background: #0033cc;
-  border: none;
-  padding: 8px 12px;
-  margin: 0 5px;
-  color: #00ccff;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.controls button:hover {
-  background: #0055ff;
-}
-
-.controls label {
-  margin-left: 15px;
-  font-size: 14px;
-}
-
-#tempo {
-  width: 150px;
-  margin-left: 10px;
-}
+.step.playing { border: 2px solid #ffffff; }
