@@ -255,7 +255,7 @@ function playChord(time, volume = 1) {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
-    osc.type = "sawtooth";
+    osc.type = "sine"; // options are sine, square, sawtooth, triangle
     osc.frequency.setValueAtTime(fxActive.pitch ? freq * 2 : freq, time);
 
     gain.gain.setValueAtTime(Math.max(0.0001, volume * 0.25), time);
